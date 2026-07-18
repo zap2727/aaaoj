@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T1 - aaaoj</title>
+</head>
+<body>
+    <!-- 页面结构 -->
+    <a href="file:///D:/编程/c++项目/aaa实验网页组项目/home.html"><img src="https://cn.cravatar.com/avatar/f2d190d37aae1b0bad3ae1f1e3755639?d=retro"></a>
+    <a href="file:///D:/编程/c++项目/aaa实验网页组项目/profile.html">system</a>
+    <p><button onclick='if(confirm("确认要登出吗？")){logout();}'>Logout</button></p>
+    <a href="list.html">problems</a>
+    <p></p>
+    <p id="valueDisplay">加载中...</p>
+    <h2>题面：1+1=?</h2>
+    <form>
+        <label for="username">答案:</label>
+        <input type="text" id="username" name="username" required><br><br>
+        <button type="button" onclick="checkLogin()">提交</button>
+    </form>
+
+    <!-- 所有脚本放在 body 最底部 -->
+    <script>
+        // --- 登出与状态检查逻辑 ---
+        function logout(){
+            localStorage.setItem('aaaoj_login_status','\\');
+            window.location.href = "login.html";
+        }
+        function status(){
+            return localStorage.getItem('aaaoj_login_status');
+        }
+        if(status()=='\\'){
+            alert('请先登录！');
+            window.location.href = "file:///D:/编程/c++项目/aaa实验网页组项目/login.html";
+        }
+
+        // --- 核心数据初始化 ---
+        var x = localStorage.getItem('aaaojproblemT1status');
+        if (x === null) x = "Unsolved"; // 处理首次访问的情况
+
+        // 安全读取数字，防止 NaN 污染
+        var storedSolved = Number(localStorage.getItem('already_solved'));
+        var already_solved = isNaN(storedSolved) ? 0 : storedSolved;
+
+        var storedScore = Number(localStorage.getItem('aaaoj_practice_score'));
+        var practice_score = isNaN(storedScore) ? 0 : storedScore;
+
+        // 页面刚加载时，显示初始状态
+        document.getElementById('valueDisplay').textContent = x;
+
+        // --- 答题逻辑 ---
+        function checkLogin() {
+            var username = document.getElementById('username').value;
+            
+            if (username === "2") {
+                alert("答对了！");
+                if(x != "Correct"){
+                    already_solved++;
+                    practice_score++; // 假设答对一题加1分，按你的需求调整
+                    
+                    // 存入时转成字符串
+                    localStorage.setItem('already_solved', String(already_solved));
+                    localStorage.setItem('aaaoj_practice_score', String(practice_score));
+                }       
+                x = "Correct";
+                localStorage.setItem('aaaojproblemT1status', x);
+                
+                // 直接跳转，不延迟
+                window.location.href = "list.html"; 
+                
+            } else {
+                alert("答错了！");
+                if(x == "Unsolved" || x === null){
+                    x = "Wrong";
+                    localStorage.setItem('aaaojproblemT1status', x);
+                }
+                // 答错不跳转，更新页面显示
+                document.getElementById('valueDisplay').textContent = x;
+            }
+        }
+    </script>
+</body>
+</html>

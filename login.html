@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - aaaoj</title>
+    <script>
+        function checkLogin() {
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+            
+            if (localStorage.getItem('aaaoj_'+username+'_created')=='yes'&&password==localStorage.getItem('aaaoj_'+username+'_password')||username=='system'&&password=='123456') {
+		localStorage.setItem('aaaoj_login_status',username);
+                window.location.href = "home.html"; // 成功，跳转到home.html
+            } else {
+                alert("用户名或密码错误！"); // 错误提示
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>登录</h2>
+    <form>
+        <label for="username">用户名:</label>
+        <input type="text" id="username" name="username" required><br><br>
+        <label for="password">密码:</label>
+        <input type="password" id="password" name="password" required><br><br>
+        <button type="button" onclick="checkLogin()">登录</button>
+    </form>
+</body>
+</html>
